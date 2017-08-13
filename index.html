@@ -1,6 +1,7 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en"
+      ng-app="physicsSimulator">
 <head>
 	<title>Физический симулятор</title>
 	<meta charset="utf-8">
@@ -13,9 +14,15 @@
 
 <body>
 	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/angular.min.js"></script>
 	<script src="scripts/raphael.min.js"></script>
-	<script src="scripts/physics-draw.js"></script>
-	<div class="container-fluid fill-height">
+
+	<script src="scripts/physics-model.js"></script>
+	<script src="scripts/physics-view.js"></script>
+	<script src="scripts/physics-controller.js"></script>
+
+	<div class="container-fluid fill-height"
+	     ng-controller="InitializerController">
 	<div class="row">
 	<div id="mainCanvas"
 	     class="container-fluid col-md fill-height content">
@@ -27,19 +34,26 @@
 			       class="col-form-label">g</label>
 			<div class="col">
 				<input id="inputG"
-				       class="form-control"/>
+				       class="form-control"
+				       ng-model="gCoefficient"
+				       />
 			</div>
 		</div>
 		<div class="form-group row">
 			<label for="inputStartingSpeed"
 			       class="col-form-label">V</label>
 			<div class="col">
-				<input id="inputStartingSpeed" class="form-control"/>
+				<input id="inputStartingSpeed"
+				       class="form-control"
+				       ng-model="initialSpeed"/>
 			</div>
 		</div>
 		<div class="form-check row">
 			<label class="form-check-label">
-				<input id="inputNeedToTrace" type="checkbox" class="form-check-input"/>
+				<input id="inputNeedToTrace"
+				       type="checkbox"
+                                       class="form-check-input"
+                                       ng-model="needToTrace"/>
 				Трассировка
 			</label>
 		</div>
