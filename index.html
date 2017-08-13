@@ -2,41 +2,48 @@
 
 <html lang="en">
 <head>
+	<title>Физический симулятор</title>
 	<meta charset="utf-8">
+	<meta name="description" content="Физический симулятор">
+	<meta name="author" content="A.Shelyugov">
 
-	<title>The HTML5 Herald</title>
-	<meta name="description" content="The HTML5 Herald">
-	<meta name="author" content="SitePoint">
-
-	<link rel="stylesheet" href="css/styles.css?v=1.0">
-
-	<!--[if lt IE 9]>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-	<![endif]-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/page.css">
 </head>
 
 <body>
 	<script src="js/scripts.js"></script>
+	<div class="container-fluid fill-height">
+	<div class="row">
 	<div id="mainCanvas"
-	     class="content-fluid"></div>
-	<div>
+	     class="container-fluid col-md fill-height content">
+	</div>
+	<div class="col-sm-auto">
 		<form>
-		<div class="form-group">
-			<label for="inputG">g</label>
-			<input id="inputG"
-			       class="form-control"
-			       placeholder="Гравитационная постоянная"/>
+		<div class="form-group row">
+			<label for="inputG"
+			       class="col-form-label">g</label>
+			<div class="col">
+				<input id="inputG"
+				       class="form-control"/>
+			</div>
 		</div>
-		<div class="form-group">
-			<label for="inputStartingForce">F→</label>
-			<input id="inputStartingForce" class="form-control" placeholder="Начальная сила выстрела"/>
+		<div class="form-group row">
+			<label for="inputStartingSpeed"
+			       class="col-form-label">V</label>
+			<div class="col">
+				<input id="inputStartingSpeed" class="form-control"/>
+			</div>
 		</div>
-		<div class="form-group">
-			<label for="inputNeedToTrace">Трассировка</label>
-			<input id="inputNeedToTrace" class="form-check-input"/>
+		<div class="form-check row">
+			<label class="form-check-label">
+				<input id="inputNeedToTrace" type="checkbox" class="form-check-input"/>
+				Трассировка
+			</label>
 		</div>
 		</form>
+	</div>
+	</div>
 	</div>
 </body>
 </html>
