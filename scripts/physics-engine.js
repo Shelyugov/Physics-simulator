@@ -1,49 +1,54 @@
 const engine = {
 	minDelta: 0.1,
 	minSpeed: 0.1,
-	maxStates: 1000,
+	maxStates: 100,
 
 	calculateSimulation: function(env, dt) {
 		if (dt <= 0) {
 			return;
 		}
-		while(canContinueCalculation(env)) {
-			var state = $.extend({}, env.states[env.states.length - 1]);
-			recalculateState(env, state, dt);
-			env.states.push(state);
+		var i = 1;
+		while(this.canContinueCalculation(env)) {
+			var state = $.extend(true, {}, env.states[i - 1]);
+			this.recalculateState(env, state, dt);
+			i = env.states.push(state);
 		}
+		return env.states;
 	},
 
-	createEnv: function(gCoef, initialState) {
+	createEnvironment: function(gCoef, initialState) {
 		return {
 			gCoefficient: gCoef,
 			states: [initialState]
 		};
 	},
 
-	createInitialState: function(x0, y0, vx0, vy0) {
+	createState: function(x, y, vx, vy, mass) {
 		return {
 			objects: [{
-				x: x0,
-				y: y0,
+				x: x,
+				y: y,
 				v: {
-					x: vx0,
-					y: vy0
-				}
+					x: vx,
+					y: vy
+				},
+				mass: mass
 			}]
 		};
-	}
+	},
 
-	canContinueCalculation(env) {
-		return env.states.length < maxStates;
+	canContinueCalculation: function(env) {
+		return env.states.length < this.maxStates;
 	},
 
 	recalculateState: function(env, state, dt) {
-		applyForces(env, state, dt);
-		moveAllObjects(env, state, dt);
+		this.applyForces(env, state, dt);
+		this.moveAllObjects(env, state, dt);
 	},
 
 	moveAllObjects: function(env, state, dt) {
+		const minSpeed = this.minSpeed;
+		const minDelta = this.minDelta;
 		state.objects.forEach(function(o) {
 			if (Math.abs(o.v.x) > minSpeed) {
 				o.x += o.v.x;
@@ -71,26 +76,28 @@ const engine = {
 const forces = {
 	// Сила сопротивления воздуха
 	airResistanceForce: {
-		coef: 0.3, // Сила сопротивления воздуха
+		coef: 0.05, // Сила сопротивления воздуха
 		applyTo: function(env, o, dt) {
 			const v = o.v;
-			v.x -= Math.sign(v.x) * Math.pow(v.x, 2) * coef;
-			v.y -= Math.sign(v.y) * Math.pow(v.y, 2) * coef;
+			v.x -= Math.sign(v.x) * (Math.pow(v.x, 2) * this.coef) * dt;
+			v.y -= Math.sign(v.y) * (Math.pow(v.y, 2) * this.coef) * dt;
 		}
 	},
 
 	// Сила гравитации
 	gravityForce: {
 		applyTo: function(env, o, dt) {
-			o.v.y -= o.mass * env.gCoeffient * dt;
+			if (o.y > 0) {
+				o.v.y -= env.gCoefficient * dt;
+			}
 		}
 	},
 
 	// Сила реакции опоры
 	supportReactionForce: {
 		applyTo: function(env, o, dt) {
-			if (o.y == 0) {
-				o.v.y += o.mass * env.gCoefficient * dt;
+			if (o.y <= 0) {
+				o.v.y += env.gCoefficient * dt;
 			}
 		}
 	}

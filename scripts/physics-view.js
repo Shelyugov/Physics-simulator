@@ -1,15 +1,32 @@
 const viewProperties = {
 	x0: 0, // абцисса точки обзора
 	y0: 0, // ордината точки обзора
-	scale: 100 // пикселей в метре
+	scale: 10 // пикселей в метре
 };
 
 var paper;
 
+function getCanvas() {
+	return $('#mainCanvas');
+}
+
+function drawTrace(states) {
+	drawViewport();
+	states.forEach(function(state) {
+		state.objects.forEach(function(object) {
+			const h = getCanvas().height();
+			const scale = viewProperties.scale;
+			if (object.x < getCanvas().width() / scale && object.y < h / scale) {
+				paper.circle(object.x * scale, h - object.y * scale, 10);
+			}
+		})
+	});
+}
+
 function drawAxis() {
 	// Нарисовать засечки оси x
 	var x = 0, xLocal = viewProperties.x0;
-	const canvas = $('#mainCanvas');
+	const canvas = getCanvas();
 	const w = canvas.width();
 	const h = canvas.height();
 	const scale = viewProperties.scale;
@@ -43,6 +60,7 @@ function drawAxis() {
 }
 
 function drawViewport() {
+	paper.clear();
 	drawAxis();
 }
 
@@ -50,5 +68,3 @@ function initViewport() {
 	paper = new Raphael("mainCanvas", "100%", "100%");
 	drawViewport();
 }
-
-window.onload = initViewport;
